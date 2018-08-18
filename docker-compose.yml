@@ -1,0 +1,29 @@
+version: '3'
+volumes:
+  var-lib-mysql:
+services:
+  database:
+    image: "mariadb:10.1"
+    environment:
+      - MYSQL_ROOT_PASSWORD=trinity
+      - MYSQL_DATABASE=world
+    volumes:
+      - ./database/:/docker-entrypoint-initdb.d/
+      - var-lib-mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+  authserver:
+    image: radiocuatoi/apps:trinitycore-wotlk-base-latest
+    volumes:
+       - ./authserver/authserver.conf:/app/etc/authserver.conf
+    ports:
+      - 3724:3724
+    command: ["/app/bin/authserver"]
+  worldserver:
+    image: radiocuatoi/apps:trinitycore-wotlk-base-latest
+    volumes:
+      - ./worldserver/data:/app/data
+      - ./worldserver/worldserver.conf:/app/etc/worldserver.conf
+    ports:
+      - 8085:8085
+    command: ["/app/bin/worldserver"]
