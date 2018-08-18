@@ -8,5 +8,5 @@ RUN cd /code &&\
     cd build &&\
     cmake ../ -DCMAKE_INSTALL_PREFIX=/app \
     -DTOOLS=1 &&\
-    make  -j 2 &&\
+    make  -j $(nproc) &&\
     make install
