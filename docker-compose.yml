@@ -14,6 +14,7 @@ services:
       - 3306:3306
   authserver:
     image: radiocuatoi/apps:trinitycore-wotlk-base-latest
+    working_dir: /app/etc
     volumes:
        - ./authserver/authserver.conf:/app/etc/authserver.conf
     ports:
@@ -21,9 +22,12 @@ services:
     command: ["/app/bin/authserver"]
   worldserver:
     image: radiocuatoi/apps:trinitycore-wotlk-base-latest
+    stdin_open: true
+    tty: true
     volumes:
       - ./worldserver/data:/app/data
-      - ./worldserver/worldserver.conf:/app/etc/worldserver.conf
+      - ./worldserver/etc:/app/etc
+    working_dir: /app/etc
     ports:
       - 8085:8085
-    command: ["/app/bin/worldserver"]
+    command: ["screen","-S","ws","/app/bin/worldserver"]
