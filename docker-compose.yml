@@ -4,6 +4,7 @@ volumes:
 services:
   database:
     image: "mariadb:10.1"
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=trinity
       - MYSQL_DATABASE=world
@@ -15,6 +16,7 @@ services:
   authserver:
     image: radiocuatoi/apps:trinitycore-wotlk-base-latest
     working_dir: /app/etc
+    restart: always
     volumes:
        - ./authserver/authserver.conf:/app/etc/authserver.conf
     ports:
@@ -24,9 +26,12 @@ services:
     image: radiocuatoi/apps:trinitycore-wotlk-base-latest
     stdin_open: true
     tty: true
+    restart: always
     volumes:
       - ./worldserver/data:/app/data
-      - ./worldserver/etc:/app/etc
+      - ./worldserver/etc/worldserver.conf:/app/etc/worldserver.conf
+      - ./worldserver/etc/aiplayerbot.conf:/app/etc/aiplayerbot.conf
+      - ./worldserver/etc/ahbot.conf:/app/etc/ahbot.conf
     working_dir: /app/etc
     ports:
       - 8085:8085
